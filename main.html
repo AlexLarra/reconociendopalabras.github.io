@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Aprende a leer</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(to bottom, #87CEEB, #DCDCDC);
+	  }
+
+    #word {
+      font-size: 10rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #instructions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.2rem;
+    }
+
+    #container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    #btn-previous,
+    #btn-next {
+      font-size: 3rem;
+      text-align: center;
+      margin: 4rem;
+    }
+
+    button {
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      background-color: #f8bc41;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 3px 3px 0 #e79b34;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #e79b34;
+      box-shadow: none;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn {
+      width: 56px;
+      height: 56px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+      border-radius: 5px;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <button id="btn-previous" onclick="javascript:previousWord()">&larr;</button>
+    <div id="word" onclick="javascript:playSound()"></div>
+    <button id="btn-next" onclick="javascript:nextWord()">&rarr;</button>
+  </div>
+
+  <div id="instructions" style="position: absolute; top: 10px; left: 10px;">
+    <div class="dropdown">
+      <button class="dropbtn">&#x2699;</button>
+      <div class="dropdown-content">
+        <a href="javascript:changeMode()">&uarr; Mayúsculas</a>
+        <a href="javascript:toggleRandom()">&#x267B; Aleatorias</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const words =
+      ["mamá","papá","bebé","hermano","hermana","abuelo","abuela","perro","gato","conejo","oso","elefante","jirafa","león","tigre","vaca","caballo","oveja","cerdo","pato","ganso","pollo","pavo","árbol","flor","mariposa","abeja","mar","río","sol","luna","estrella","nube","lluvia","nieve","arcoiris","comida","agua","leche","pan","queso","manzana","plátano","naranja","uvas","fresa","limón","tomate","zanahoria","cebolla","patata","huevo","carne","pollo","pescado","arroz","frijoles","bizcocho","hamburguesa","pizza","pastel","helado","caja","pelota","muñeca","coche","tren","avión","barco","bicicleta","baloncesto","fútbol","gracias","juguetes","ropa","zapatos","sombrero","gafas","casa","puerta","ventana","cama","silla","mesa","cocina","baño","escuela","maestro","amigo","fiesta","juego","libro","música","película","dormir","despertar","jugar","comer","beber","correr","saltar","bailar","cantar","reír","llorar","amar","abrazar","besar","ayudar","aprender","crecer"];
+
+    let currentWord = 0;
+    let modo = "capitalize";
+    let random = false;
+
+    function showWord() {
+      let word = words[currentWord];
+
+      switch (modo) {
+        case "uppercase":
+          word = word.toUpperCase();
+          break;
+        case "downcase":
+          word = word.toLowerCase();
+          break;
+        case "capitalize":
+          word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          break;
+      }
+
+      if (random) {
+        currentWord = Math.floor(Math.random() * words.length);
+      }
+
+      document.getElementById("word").textContent = word;
+    }
+
+    function nextWord() {
+  		if (random) {
+    		currentWord = Math.floor(Math.random() * words.length);
+  		} else {
+    		currentWord++;
+    		if (currentWord === words.length) {
+      			currentWord = 0;
+    		}
+  		}
+
+  		showWord();
+	  }
+
+	  function previousWord() {
+      if (currentWord > 0) {
+        currentWord--;
+        showWord();
+      }
+    }
+
+    function changeMode() {
+      switch (modo) {
+        case "uppercase":
+          modo = "downcase";
+          break;
+        case "downcase":
+          modo = "capitalize";
+          break;
+        case "capitalize":
+          modo = "uppercase";
+          break;
+      }
+
+      showWord();
+    }
+
+    function toggleRandom() {
+      random = !random;
+    }
+
+    document.addEventListener("keydown", function(event) {
+      if (event.code === "ArrowRight") {
+        nextWord();
+      } else if (event.code === "ArrowLeft") {
+        previousWord();
+      } else if (event.code === "KeyA") {
+        random = !random;
+      } else if (event.code === "Space") {
+        playSound();
+      } else if (event.code === "ArrowUp") {
+        changeMode();
+      }
+
+      showWord();
+    });
+
+	  function playSound() {
+  	  const message = new SpeechSynthesisUtterance();
+  	  message.text = words[currentWord];
+      message.lang = 'es-ES';
+      window.speechSynthesis.speak(message);
+    }
+
+    showWord();
+  </script>
+</body>
+</html>
+
