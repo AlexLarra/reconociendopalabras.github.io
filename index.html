@@ -133,7 +133,7 @@
   </div>
 
   <div id="modal" class="modal">
-    <img id="imagen-modal"></img>
+    <img id="image-modal"></img>
   </div>
 
   <script>
@@ -247,27 +247,24 @@
             resolve(data.urls.regular);
           })
           .catch((error) => {
-            // Si hay un error, se rechaza la promesa con el mensaje de error
-            reject("Error al obtener datos del servicio externo: " + error.message);
+            reject("Error getting data from external service: " + error.message);
           });
       });
     }
 
     const wordContainer = document.getElementById("word-container");
     const modal = document.getElementById("modal");
-    const imagenModal = document.getElementById("imagen-modal");
+    const imageModal = document.getElementById("image-modal");
 
-    // Función para mostrar el modal con la imagen
-    function mostrarImagenModal(imagenSrc) {
-      imagenModal.src = imagenSrc; // Actualiza el src del elemento de imagen
-      modal.style.display = "flex"; // Muestra el modal
+    function showImageModal(imageSrc) {
+      imageModal.src = imageSrc;
+      modal.style.display = "flex";
     }
 
-    // Agrega un evento al botón para mostrar la imagen del perro en el modal
     wordContainer.addEventListener("click", () => {
       getImageSrc()
         .then((data) => {
-          mostrarImagenModal(data);
+          showImageModal(data);
           playSound();
         })
         .catch((error) => {
@@ -276,7 +273,7 @@
     });
 
     modal.addEventListener("click", () => {
-      modal.style.display = "none"; // Oculta el modal
+      modal.style.display = "none";
     });
 
     showWord();
