@@ -132,22 +132,21 @@
     </div>
   </div>
 
-  <button id="abrir-modal">Mostrar imagen</button>
-
   <div id="modal" class="modal">
     <img id="imagen-modal"></img>
   </div>
 
   <script>
     const words =
-      ["mamá","papá","bebé","hermano","hermana","abuelo","abuela","perro","gato","conejo","oso","elefante","jirafa","león","tigre","vaca","caballo","oveja","cerdo","pato","ganso","pollo","pavo","árbol","flor","mariposa","abeja","mar","río","sol","luna","estrella","nube","lluvia","nieve","arcoiris","comida","agua","leche","pan","queso","manzana","plátano","naranja","uvas","fresa","limón","tomate","zanahoria","cebolla","patata","huevo","carne","pollo","pescado","arroz","frijoles","bizcocho","hamburguesa","pizza","pastel","helado","caja","pelota","muñeca","coche","tren","avión","barco","bicicleta","baloncesto","fútbol","gracias","juguetes","ropa","zapatos","sombrero","gafas","casa","puerta","ventana","cama","silla","mesa","cocina","baño","escuela","maestro","amigo","fiesta","juego","libro","música","película","dormir","despertar","jugar","comer","beber","correr","saltar","bailar","cantar","reír","llorar","amar","abrazar","besar","ayudar","aprender","crecer"];
+      {"mamá":"DTPlIdXJexI","papá":"TODO","bebé":"TODO","hermano":"TODO","hermana":"TODO","abuelo":"TODO","abuela":"TODO","perro":"TODO","gato":"TODO","conejo":"TODO","oso":"TODO","elefante":"TODO","jirafa":"TODO","león":"TODO","tigre":"TODO","vaca":"TODO","caballo":"TODO","oveja":"TODO","cerdo":"TODO","pato":"TODO","ganso":"TODO","pollo":"TODO","pavo":"TODO","árbol":"TODO","flor":"TODO","mariposa":"TODO","abeja":"TODO","mar":"TODO","río":"TODO","sol":"TODO","luna":"TODO","estrella":"TODO","nube":"TODO","lluvia":"TODO","nieve":"TODO","arcoiris":"TODO","comida":"TODO","agua":"TODO","leche":"TODO","pan":"TODO","queso":"TODO","manzana":"TODO","plátano":"TODO","naranja":"TODO","uvas":"TODO","fresa":"TODO","limón":"TODO","tomate":"TODO","zanahoria":"TODO","cebolla":"TODO","patata":"TODO","huevo":"TODO","carne":"TODO","pescado":"TODO","arroz":"TODO","frijoles":"TODO","bizcocho":"TODO","hamburguesa":"TODO","pizza":"TODO","pastel":"TODO","helado":"TODO","caja":"TODO","pelota":"TODO","muñeca":"TODO","coche":"TODO","tren":"TODO","avión":"TODO","barco":"TODO","bicicleta":"TODO","baloncesto":"TODO","fútbol":"TODO","gracias":"TODO","juguetes":"TODO","ropa":"TODO","zapatos":"TODO","sombrero":"TODO","gafas":"TODO","casa":"TODO","puerta":"TODO","ventana":"TODO","cama":"TODO","silla":"TODO","mesa":"TODO","cocina":"TODO","baño":"TODO","escuela":"TODO","maestro":"TODO","amigo":"TODO","fiesta":"TODO","juego":"TODO","libro":"TODO","música":"TODO","película":"TODO","dormir":"TODO","despertar":"TODO","jugar":"TODO","comer":"TODO","beber":"TODO","correr":"TODO","saltar":"TODO","bailar":"TODO","cantar":"TODO","reír":"TODO","llorar":"TODO","amar":"TODO","abrazar":"TODO","besar":"TODO","ayudar":"TODO","aprender":"TODO","crecer":"TODO"}
 
-    let currentWord = 0;
+    const allKeys = Object.keys(words);
+    let currentWord = Object.keys(words)[0];
     let modo = "capitalize";
     let random = false;
 
     function showWord() {
-      let word = words[currentWord];
+      let word = currentWord
 
       switch (modo) {
         case "uppercase":
@@ -168,22 +167,27 @@
       document.getElementById("word-container").textContent = word;
     }
 
+    function index() {
+      return allKeys.indexOf(currentWord);
+    }
+
     function nextWord() {
   		if (random) {
-    		currentWord = Math.floor(Math.random() * words.length);
+    		currentWord = allKeys[Math.floor(Math.random() * allKeys.length)];
   		} else {
-    		currentWord++;
-    		if (currentWord === words.length) {
-      			currentWord = 0;
-    		}
+    		if (currentWord === allKeys[allKeys.length-1]) {
+          currentWord = Object.keys(words)[0];
+        } else {
+          currentWord = allKeys[index() + 1];
+        }
   		}
 
   		showWord();
 	  }
 
 	  function previousWord() {
-      if (currentWord > 0) {
-        currentWord--;
+      if (currentWord != Object.keys(words)[0]) {
+        currentWord = allKeys[index() - 1];
         showWord();
       }
     }
