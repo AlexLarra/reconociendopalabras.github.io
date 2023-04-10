@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Aprende a leer</title>
+  <script src="https://www.youtube.com/player_api"></script>
   <style>
     body {
       display: flex;
@@ -13,7 +14,7 @@
       background: linear-gradient(to bottom, #87CEEB, #DCDCDC);
 	  }
 
-    #word {
+    #word-container {
       font-size: 10rem;
       text-align: center;
       margin-bottom: 2rem;
@@ -21,8 +22,16 @@
 
     #instructions {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      width: fix-content;
+    }
+
+    #audioBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       font-size: 1.2rem;
     }
 
@@ -92,16 +101,37 @@
     .dropdown:hover .dropdown-content {
       display: block;
     }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal img {
+      display: block;
+      max-width: 80%;
+      max-height: 80%;
+      margin: auto;
+      align-self: center;
+      justify-self: center;
+    }
   </style>
 </head>
 <body>
-  <div id="container">
-    <button id="btn-previous" onclick="javascript:previousWord()">&larr;</button>
-    <div id="word" onclick="javascript:playSound()"></div>
-    <button id="btn-next" onclick="javascript:nextWord()">&rarr;</button>
+  <div id="modal" class="modal">
+    <img id="image-modal"></img>
   </div>
 
-  <div id="instructions" style="position: absolute; top: 10px; left: 10px;">
+  <div id="player"></div>
+
+  <div id="instructions">
     <div class="dropdown">
       <button class="dropbtn">&#x2699;</button>
       <div class="dropdown-content">
@@ -111,16 +141,25 @@
     </div>
   </div>
 
+  <button id="audioBtn">&#x1F50A;</button>
+
+  <div id="container">
+    <button id="btn-previous" onclick="javascript:previousWord()">&larr;</button>
+    <div id="word-container"></div>
+    <button id="btn-next" onclick="javascript:nextWord()">&rarr;</button>
+  </div>
+
   <script>
     const words =
-      ["mamá","papá","bebé","hermano","hermana","abuelo","abuela","perro","gato","conejo","oso","elefante","jirafa","león","tigre","vaca","caballo","oveja","cerdo","pato","ganso","pollo","pavo","árbol","flor","mariposa","abeja","mar","río","sol","luna","estrella","nube","lluvia","nieve","arcoiris","comida","agua","leche","pan","queso","manzana","plátano","naranja","uvas","fresa","limón","tomate","zanahoria","cebolla","patata","huevo","carne","pollo","pescado","arroz","frijoles","bizcocho","hamburguesa","pizza","pastel","helado","caja","pelota","muñeca","coche","tren","avión","barco","bicicleta","baloncesto","fútbol","gracias","juguetes","ropa","zapatos","sombrero","gafas","casa","puerta","ventana","cama","silla","mesa","cocina","baño","escuela","maestro","amigo","fiesta","juego","libro","música","película","dormir","despertar","jugar","comer","beber","correr","saltar","bailar","cantar","reír","llorar","amar","abrazar","besar","ayudar","aprender","crecer"];
+      {"mamá":"DTPlIdXJexI","papá":"u181sbSXBmk","bebé":"CgWTqYxHEkg","hermano":"7f_gsUxmiOQ","hermana":"EMZxDosijJ4","abuelo":"FiIgXyC3t84","abuela":"L4nwL3195U0","perro":"yihlaRCCvd4","gato":"mJaD10XeD7w","conejo":"u_kMWN-BWyU","oso":"_QG2C0q6J-s","elefante":"QJbyG6O0ick","jirafa":"UqB0TfIdqNE","león":"ZxNKxnR32Ng","tigre":"XCg1BQf-fso","vaca":"nUCt1PjRNHE","caballo":"Huza8QOO3tc","oveja":"qg8ihPPQkKo","cerdo":"w_cSBsncdzg","pato":"aWAvPqjbYZ8","ganso":"YsGtJLKZVgk","gallina":"yEW23jxVsNI","gallo":"WDKEg5sDz0Y","árbol":"tGTVxeOr_Rs","flor":"bczMF9uzxws","mariposa":"IC8zpKz6qF0","abeja":"yxXpjF-RrnA","mar":"6ArTTluciuA","río":"rB7-LCa_diU","sol":"5YWf-5hyZcw","luna":"pE8WW245aik","estrella":"asuyh-_ZX54","nube":"IM8ZyYaSW6g","lluvia":"5Q5jtb1SEVo","nieve":"IWenq-4JHqo","arcoiris":"t_ZdxJsE8iM","comida":"kcA-c3f_3FE","agua":"rrfdqjJWwmU","leche":"p3ViLmVgVJ4","pan":"N4gtuEZ5gWc","queso":"kPqaqug998Y","manzana":"H6VxhE_x-kE","plátano":"0v_1TPz1uXw","naranja":"9002s2VnOAY","uvas":"KyFEImlFKQY","fresa":"grjHFqaCLCg","limón":"ohNxxapID_k","tomate":"LVbK9CdrRbM","zanahoria":"GHRT9j21m2M","cebolla":"rDDICrot22U","patata":"ECxiHN817xE","huevo":"oAlRgZXsXUI","carne":"6-5Ul3I6vSE","pescado":"vLQzopDRSNI","arroz":"xmuIgjuQG0M","alubias":"t4X660oKiYs","galleta":"eXqfxc8flyU","hamburguesa":"_TLKIVSW6Do","pizza":"Oxb84ENcFfU","pastel":"ftrv8LiVZso","helado":"NEab1U1FfKM","caja":"8mCsyImZRGY","pelota":"KtYQeUDoVPM","muñeca":"FTumOdB4lsI","coche":"DH_IAgZkJP4","tren":"7KKQG0eB_TI","avión":"AKYjr-kmYtQ","barco":"0WQLuFqMYYI","bicicleta":"tG36rvCeqng","baloncesto":"khx1_ltFGb4","fútbol":"Z0KjmjxUsKs","gracias":"yvhE39CZByM","juguetes":"qBrF1yu5Wys","ropa":"zw_oaDbfzyE","zapatos":"a-QH9MAAVNI","sombrero":"Fo2l3fG-40g","gafas":"LHaqQkG_mgQ","casa":"eWqOgJ-lfiI","puerta":"ktQQhO--Yw4","ventana":"4gRNmhGzYZE","cama":"2QTsCoQnoag","silla":"1vIHVh9OaVI","mesa":"m2RFkLGL8Qs","cocina":"UDDULE_eIBY","baño":"Aac7IlKnYX8","escuela":"zFSo6bnZJTw","maestro":"4T-02pK0jUg","amigo":"PGnqT0rXWLs","fiesta":"wZjJxOx8FPI","juego":"3WceTBlUoMs","libro":"H1IRUS1vEFA","música":"fCEJGBzAkrU","película":"wMkaMXTJjlQ","dormir":"hfvFunLkFgg","despertar":"1VwCMXGeQxc","jugar":"tvc5imO5pXk","comer":"LqaLgCnnh3Y","beber":"herxiurDrRk","correr":"HyivyCRdz14","saltar":"KD1_85wpCE0","bailar":"6Woj_wozqmA","cantar":"-Gx7tuwO8_U","reír":"YuidWzM37C0","llorar":"Y-H5pu2oglE","amar":"WbpoVhvNP_M","abrazar":"KQCXf_zvdaU","besar":"Xm2b6fPU26M","ayudar":"9VpI3gQ1iUo","aprender":"leyUrzdwurc","crecer":"ruQHpukrN7c"}
 
-    let currentWord = 0;
+    const allKeys = Object.keys(words);
+    let currentWord = Object.keys(words)[0];
     let modo = "capitalize";
     let random = false;
 
     function showWord() {
-      let word = words[currentWord];
+      let word = currentWord
 
       switch (modo) {
         case "uppercase":
@@ -138,25 +177,30 @@
         currentWord = Math.floor(Math.random() * words.length);
       }
 
-      document.getElementById("word").textContent = word;
+      document.getElementById("word-container").textContent = word;
+    }
+
+    function index() {
+      return allKeys.indexOf(currentWord);
     }
 
     function nextWord() {
   		if (random) {
-    		currentWord = Math.floor(Math.random() * words.length);
+    		currentWord = allKeys[Math.floor(Math.random() * allKeys.length)];
   		} else {
-    		currentWord++;
-    		if (currentWord === words.length) {
-      			currentWord = 0;
-    		}
+    		if (currentWord === allKeys[allKeys.length-1]) {
+          currentWord = Object.keys(words)[0];
+        } else {
+          currentWord = allKeys[index() + 1];
+        }
   		}
 
   		showWord();
 	  }
 
 	  function previousWord() {
-      if (currentWord > 0) {
-        currentWord--;
+      if (currentWord != Object.keys(words)[0]) {
+        currentWord = allKeys[index() - 1];
         showWord();
       }
     }
@@ -199,10 +243,93 @@
 
 	  function playSound() {
   	  const message = new SpeechSynthesisUtterance();
-  	  message.text = words[currentWord];
+  	  message.text = currentWord;
       message.lang = 'es-ES';
       window.speechSynthesis.speak(message);
     }
+
+    function getImageSrc() {
+      const word = words[currentWord];
+      const api_key = "-lWbNj-vRxnX5P0MXS0_RpiCEc1x6VxxGB4v3sz94Os";
+
+      return new Promise((resolve, reject) => {
+        fetch(`https://api.unsplash.com/photos/${words[currentWord]}`, { headers: { Authorization: `Client-ID ${api_key}` } })
+          .then(response => response.json())
+          .then(data => {
+            resolve(data.urls.small);
+          })
+          .catch((error) => {
+            reject("Error getting data from external service: " + error.message);
+          });
+      });
+    }
+
+    const wordContainer = document.getElementById("word-container");
+    const modal = document.getElementById("modal");
+    const imageModal = document.getElementById("image-modal");
+
+    function showImageModal(imageSrc) {
+      imageModal.src = imageSrc;
+      modal.style.display = "flex";
+    }
+
+    wordContainer.addEventListener("click", () => {
+      imageModal.src = "";
+      getImageSrc()
+        .then((data) => {
+          showImageModal(data);
+          playSound();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+
+    modal.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    var player;
+    function onYouTubePlayerAPIReady() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: 'BTjdc2IfMvc',
+        playerVars: {
+          autoplay: 1,
+          loop: 1,
+          controls: 0,
+          showinfo: 0,
+          modestbranding: 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      event.target.setVolume(20);
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo(); // Plays sound again when it ends.
+      }
+    }
+
+    const audioBtn = document.getElementById("audioBtn");
+
+    audioBtn.onclick = function() {
+      if (player.isMuted()) {
+        audioBtn.innerHTML = "&#x1F50A;";
+        player.unMute();
+      } else {
+        audioBtn.innerHTML = "&#x1F507;";
+        player.mute();
+      }
+    };
 
     showWord();
   </script>
