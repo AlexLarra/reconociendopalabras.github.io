@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Aprende a leer</title>
+  <script src="https://www.youtube.com/player_api"></script>
   <style>
     body {
       display: flex;
@@ -135,6 +136,8 @@
   <div id="modal" class="modal">
     <img id="image-modal"></img>
   </div>
+
+  <div id="player"></div>
 
   <script>
     const words =
@@ -275,6 +278,36 @@
     modal.addEventListener("click", () => {
       modal.style.display = "none";
     });
+
+    var player;
+    function onYouTubePlayerAPIReady() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: 'BTjdc2IfMvc',
+        playerVars: {
+          autoplay: 1,
+          loop: 1,
+          controls: 0,
+          showinfo: 0,
+          modestbranding: 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      event.target.setVolume(20);
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.ENDED) {
+        player.playVideo(); // Plays sound again at the end
+      }
+    }
 
     showWord();
   </script>
