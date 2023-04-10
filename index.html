@@ -151,7 +151,7 @@
 
   <script>
     const words =
-      {"mamá":"DTPlIdXJexI","papá":"TODO","bebé":"TODO","hermano":"TODO","hermana":"TODO","abuelo":"TODO","abuela":"TODO","perro":"TODO","gato":"TODO","conejo":"TODO","oso":"TODO","elefante":"TODO","jirafa":"TODO","león":"TODO","tigre":"TODO","vaca":"TODO","caballo":"TODO","oveja":"TODO","cerdo":"TODO","pato":"TODO","ganso":"TODO","pollo":"TODO","pavo":"TODO","árbol":"TODO","flor":"TODO","mariposa":"TODO","abeja":"TODO","mar":"TODO","río":"TODO","sol":"TODO","luna":"TODO","estrella":"TODO","nube":"TODO","lluvia":"TODO","nieve":"TODO","arcoiris":"TODO","comida":"TODO","agua":"TODO","leche":"TODO","pan":"TODO","queso":"TODO","manzana":"TODO","plátano":"TODO","naranja":"TODO","uvas":"TODO","fresa":"TODO","limón":"TODO","tomate":"TODO","zanahoria":"TODO","cebolla":"TODO","patata":"TODO","huevo":"TODO","carne":"TODO","pescado":"TODO","arroz":"TODO","frijoles":"TODO","bizcocho":"TODO","hamburguesa":"TODO","pizza":"TODO","pastel":"TODO","helado":"TODO","caja":"TODO","pelota":"TODO","muñeca":"TODO","coche":"TODO","tren":"TODO","avión":"TODO","barco":"TODO","bicicleta":"TODO","baloncesto":"TODO","fútbol":"TODO","gracias":"TODO","juguetes":"TODO","ropa":"TODO","zapatos":"TODO","sombrero":"TODO","gafas":"TODO","casa":"TODO","puerta":"TODO","ventana":"TODO","cama":"TODO","silla":"TODO","mesa":"TODO","cocina":"TODO","baño":"TODO","escuela":"TODO","maestro":"TODO","amigo":"TODO","fiesta":"TODO","juego":"TODO","libro":"TODO","música":"TODO","película":"TODO","dormir":"TODO","despertar":"TODO","jugar":"TODO","comer":"TODO","beber":"TODO","correr":"TODO","saltar":"TODO","bailar":"TODO","cantar":"TODO","reír":"TODO","llorar":"TODO","amar":"TODO","abrazar":"TODO","besar":"TODO","ayudar":"TODO","aprender":"TODO","crecer":"TODO"}
+      {"mamá":"DTPlIdXJexI","papá":"u181sbSXBmk","bebé":"CgWTqYxHEkg","hermano":"7f_gsUxmiOQ","hermana":"EMZxDosijJ4","abuelo":"FiIgXyC3t84","abuela":"L4nwL3195U0","perro":"yihlaRCCvd4","gato":"mJaD10XeD7w","conejo":"u_kMWN-BWyU","oso":"_QG2C0q6J-s","elefante":"QJbyG6O0ick","jirafa":"UqB0TfIdqNE","león":"ZxNKxnR32Ng","tigre":"XCg1BQf-fso","vaca":"nUCt1PjRNHE","caballo":"Huza8QOO3tc","oveja":"qg8ihPPQkKo","cerdo":"w_cSBsncdzg","pato":"aWAvPqjbYZ8","ganso":"YsGtJLKZVgk","gallina":"yEW23jxVsNI","gallo":"WDKEg5sDz0Y","árbol":"TODO","flor":"TODO","mariposa":"TODO","abeja":"TODO","mar":"TODO","río":"TODO","sol":"TODO","luna":"TODO","estrella":"TODO","nube":"TODO","lluvia":"TODO","nieve":"TODO","arcoiris":"TODO","comida":"TODO","agua":"TODO","leche":"TODO","pan":"TODO","queso":"TODO","manzana":"TODO","plátano":"TODO","naranja":"TODO","uvas":"TODO","fresa":"TODO","limón":"TODO","tomate":"TODO","zanahoria":"TODO","cebolla":"TODO","patata":"TODO","huevo":"TODO","carne":"TODO","pescado":"TODO","arroz":"TODO","frijoles":"TODO","bizcocho":"TODO","hamburguesa":"TODO","pizza":"TODO","pastel":"TODO","helado":"TODO","caja":"TODO","pelota":"TODO","muñeca":"TODO","coche":"TODO","tren":"TODO","avión":"TODO","barco":"TODO","bicicleta":"TODO","baloncesto":"TODO","fútbol":"TODO","gracias":"TODO","juguetes":"TODO","ropa":"TODO","zapatos":"TODO","sombrero":"TODO","gafas":"TODO","casa":"TODO","puerta":"TODO","ventana":"TODO","cama":"TODO","silla":"TODO","mesa":"TODO","cocina":"TODO","baño":"TODO","escuela":"TODO","maestro":"TODO","amigo":"TODO","fiesta":"TODO","juego":"TODO","libro":"TODO","música":"TODO","película":"TODO","dormir":"TODO","despertar":"TODO","jugar":"TODO","comer":"TODO","beber":"TODO","correr":"TODO","saltar":"TODO","bailar":"TODO","cantar":"TODO","reír":"TODO","llorar":"TODO","amar":"TODO","abrazar":"TODO","besar":"TODO","ayudar":"TODO","aprender":"TODO","crecer":"TODO"}
 
     const allKeys = Object.keys(words);
     let currentWord = Object.keys(words)[0];
@@ -251,13 +251,12 @@
     function getImageSrc() {
       const word = words[currentWord];
       const api_key = "-lWbNj-vRxnX5P0MXS0_RpiCEc1x6VxxGB4v3sz94Os";
-      const id = "DTPlIdXJexI"
 
       return new Promise((resolve, reject) => {
-        fetch(`https://api.unsplash.com/photos/${id}`, { headers: { Authorization: `Client-ID ${api_key}` } })
+        fetch(`https://api.unsplash.com/photos/${words[currentWord]}`, { headers: { Authorization: `Client-ID ${api_key}` } })
           .then(response => response.json())
           .then(data => {
-            resolve(data.urls.regular);
+            resolve(data.urls.small);
           })
           .catch((error) => {
             reject("Error getting data from external service: " + error.message);
