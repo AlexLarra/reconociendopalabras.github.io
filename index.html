@@ -22,8 +22,16 @@
 
     #instructions {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      width: fix-content;
+    }
+
+    #audioBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       font-size: 1.2rem;
     }
 
@@ -117,13 +125,13 @@
   </style>
 </head>
 <body>
-  <div id="container">
-    <button id="btn-previous" onclick="javascript:previousWord()">&larr;</button>
-    <div id="word-container"></div>
-    <button id="btn-next" onclick="javascript:nextWord()">&rarr;</button>
+  <div id="modal" class="modal">
+    <img id="image-modal"></img>
   </div>
 
-  <div id="instructions" style="position: absolute; top: 10px; left: 10px;">
+  <div id="player"></div>
+
+  <div id="instructions">
     <div class="dropdown">
       <button class="dropbtn">&#x2699;</button>
       <div class="dropdown-content">
@@ -133,11 +141,13 @@
     </div>
   </div>
 
-  <div id="modal" class="modal">
-    <img id="image-modal"></img>
-  </div>
+  <button id="audioBtn">&#x1F50A;</button>
 
-  <div id="player"></div>
+  <div id="container">
+    <button id="btn-previous" onclick="javascript:previousWord()">&larr;</button>
+    <div id="word-container"></div>
+    <button id="btn-next" onclick="javascript:nextWord()">&rarr;</button>
+  </div>
 
   <script>
     const words =
@@ -305,9 +315,21 @@
 
     function onPlayerStateChange(event) {
       if (event.data === YT.PlayerState.ENDED) {
-        player.playVideo(); // Plays sound again at the end
+        player.playVideo(); // Plays sound again when it ends.
       }
     }
+
+    const audioBtn = document.getElementById("audioBtn");
+
+    audioBtn.onclick = function() {
+      if (player.isMuted()) {
+        audioBtn.innerHTML = "&#x1F50A;";
+        player.unMute();
+      } else {
+        audioBtn.innerHTML = "&#x1F507;";
+        player.mute();
+      }
+    };
 
     showWord();
   </script>
