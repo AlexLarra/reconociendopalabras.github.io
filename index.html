@@ -168,13 +168,13 @@
 
     const allKeys = Object.keys(words);
     let currentWord = getCookie("word") || Object.keys(words)[0];
-    let modo = "uppercase";
+    let mayus = getCookie("mayus") || "uppercase";
     let random = false;
 
     function showWord() {
       let word = currentWord
 
-      switch (modo) {
+      switch (mayus) {
         case "uppercase":
           word = word.toUpperCase();
           break;
@@ -220,18 +220,19 @@
     }
 
     function changeMode() {
-      switch (modo) {
+      switch (mayus) {
         case "uppercase":
-          modo = "downcase";
+          mayus = "downcase";
           break;
         case "downcase":
-          modo = "capitalize";
+          mayus = "capitalize";
           break;
         case "capitalize":
-          modo = "uppercase";
+          mayus = "uppercase";
           break;
       }
 
+      setCookie("mayus", mayus, 30);
       showWord();
     }
 
