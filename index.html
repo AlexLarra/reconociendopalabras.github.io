@@ -169,10 +169,14 @@
     const allKeys = Object.keys(words);
     let currentWord = getCookie("word") || Object.keys(words)[0];
     let mayus = getCookie("mayus") || "uppercase";
-    let random = getCookie("random") || false;
+    let random = getCookie("random") === 'true' || false;
 
     function showWord() {
       let word = currentWord
+
+      if (random) {
+        word = Object.keys(words)[Math.floor(Math.random() * allKeys.length)];
+      }
 
       switch (mayus) {
         case "uppercase":
@@ -184,10 +188,6 @@
         case "capitalize":
           word = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
           break;
-      }
-
-      if (random) {
-        currentWord = Math.floor(Math.random() * words.length);
       }
 
       document.getElementById("word-container").textContent = word;
