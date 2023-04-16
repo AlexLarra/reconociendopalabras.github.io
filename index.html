@@ -169,7 +169,7 @@
     const allKeys = Object.keys(words);
     let currentWord = getCookie("word") || Object.keys(words)[0];
     let mayus = getCookie("mayus") || "uppercase";
-    let random = false;
+    let random = getCookie("random") || false;
 
     function showWord() {
       let word = currentWord
@@ -238,6 +238,7 @@
 
     function toggleRandom() {
       random = !random;
+      setCookie("random", random, 30);
     }
 
     document.addEventListener("keydown", function(event) {
