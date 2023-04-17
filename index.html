@@ -166,17 +166,21 @@
     const words =
       {"mamá":"DTPlIdXJexI","papá":"u181sbSXBmk","bebé":"CgWTqYxHEkg","hermano":"7f_gsUxmiOQ","hermana":"EMZxDosijJ4","abuelo":"FiIgXyC3t84","abuela":"L4nwL3195U0","perro":"yihlaRCCvd4","gato":"mJaD10XeD7w","conejo":"u_kMWN-BWyU","oso":"_QG2C0q6J-s","elefante":"QJbyG6O0ick","jirafa":"UqB0TfIdqNE","león":"ZxNKxnR32Ng","tigre":"XCg1BQf-fso","vaca":"nUCt1PjRNHE","caballo":"Huza8QOO3tc","oveja":"qg8ihPPQkKo","cerdo":"w_cSBsncdzg","pato":"aWAvPqjbYZ8","ganso":"YsGtJLKZVgk","gallina":"yEW23jxVsNI","gallo":"WDKEg5sDz0Y","árbol":"tGTVxeOr_Rs","flor":"bczMF9uzxws","mariposa":"IC8zpKz6qF0","abeja":"yxXpjF-RrnA","mar":"6ArTTluciuA","río":"rB7-LCa_diU","sol":"5YWf-5hyZcw","luna":"pE8WW245aik","estrella":"asuyh-_ZX54","nube":"IM8ZyYaSW6g","lluvia":"5Q5jtb1SEVo","nieve":"IWenq-4JHqo","arcoiris":"t_ZdxJsE8iM","comida":"kcA-c3f_3FE","agua":"rrfdqjJWwmU","leche":"p3ViLmVgVJ4","pan":"N4gtuEZ5gWc","queso":"kPqaqug998Y","manzana":"H6VxhE_x-kE","plátano":"0v_1TPz1uXw","naranja":"9002s2VnOAY","uvas":"KyFEImlFKQY","fresa":"grjHFqaCLCg","limón":"ohNxxapID_k","tomate":"LVbK9CdrRbM","zanahoria":"GHRT9j21m2M","cebolla":"rDDICrot22U","patata":"ECxiHN817xE","huevo":"oAlRgZXsXUI","carne":"6-5Ul3I6vSE","pescado":"vLQzopDRSNI","arroz":"xmuIgjuQG0M","alubias":"t4X660oKiYs","galleta":"eXqfxc8flyU","hamburguesa":"_TLKIVSW6Do","pizza":"Oxb84ENcFfU","pastel":"ftrv8LiVZso","helado":"NEab1U1FfKM","caja":"8mCsyImZRGY","pelota":"KtYQeUDoVPM","muñeca":"FTumOdB4lsI","coche":"DH_IAgZkJP4","tren":"7KKQG0eB_TI","avión":"AKYjr-kmYtQ","barco":"0WQLuFqMYYI","bicicleta":"tG36rvCeqng","baloncesto":"khx1_ltFGb4","fútbol":"Z0KjmjxUsKs","gracias":"yvhE39CZByM","juguetes":"qBrF1yu5Wys","ropa":"zw_oaDbfzyE","zapatos":"a-QH9MAAVNI","sombrero":"Fo2l3fG-40g","gafas":"LHaqQkG_mgQ","casa":"eWqOgJ-lfiI","puerta":"ktQQhO--Yw4","ventana":"4gRNmhGzYZE","cama":"2QTsCoQnoag","silla":"1vIHVh9OaVI","mesa":"m2RFkLGL8Qs","cocina":"UDDULE_eIBY","baño":"Aac7IlKnYX8","escuela":"zFSo6bnZJTw","maestro":"4T-02pK0jUg","amigo":"PGnqT0rXWLs","fiesta":"wZjJxOx8FPI","juego":"3WceTBlUoMs","libro":"H1IRUS1vEFA","música":"fCEJGBzAkrU","película":"wMkaMXTJjlQ","dormir":"hfvFunLkFgg","despertar":"1VwCMXGeQxc","jugar":"tvc5imO5pXk","comer":"LqaLgCnnh3Y","beber":"herxiurDrRk","correr":"HyivyCRdz14","saltar":"KD1_85wpCE0","bailar":"6Woj_wozqmA","cantar":"-Gx7tuwO8_U","reír":"YuidWzM37C0","llorar":"Y-H5pu2oglE","amar":"WbpoVhvNP_M","abrazar":"KQCXf_zvdaU","besar":"Xm2b6fPU26M","ayudar":"9VpI3gQ1iUo","aprender":"leyUrzdwurc","crecer":"ruQHpukrN7c"}
 
-    const allKeys = Object.keys(words);
+    const keys = Object.keys(words);
+
+    const randomWords = {};
+    const shuffledKeys = Object.keys(words).sort(() => Math.random() - 0.5);
+    for (let i = 0; i < shuffledKeys.length; i++) {
+      const key = shuffledKeys[i];
+      randomWords[key] = words[key];
+    }
+
     let currentWord = getCookie("word") || Object.keys(words)[0];
     let mayus = getCookie("mayus") || "uppercase";
     let random = getCookie("random") === 'true' || false;
 
-    function showWord(persistWord = true) {
-      let word = currentWord
-
-      if (random && !persistWord) {
-        word = Object.keys(words)[Math.floor(Math.random() * allKeys.length)];
-      }
+    function showWord() {
+      let word = currentWord;
 
       switch (mayus) {
         case "uppercase":
@@ -195,26 +199,22 @@
     }
 
     function index() {
-      return allKeys.indexOf(currentWord);
+      return getKeys().indexOf(currentWord);
     }
 
     function nextWord() {
-  		if (random) {
-    		currentWord = allKeys[Math.floor(Math.random() * allKeys.length)];
-  		} else {
-    		if (currentWord === allKeys[allKeys.length-1]) {
-          currentWord = Object.keys(words)[0];
-        } else {
-          currentWord = allKeys[index() + 1];
-        }
-  		}
+      if (currentWord === getKeys()[getKeys().length-1]) {
+        currentWord = getKeys()[0];
+      } else {
+        currentWord = getKeys()[index() + 1];
+      }
 
   		showWord();
 	  }
 
 	  function previousWord() {
-      if (currentWord != Object.keys(words)[0]) {
-        currentWord = allKeys[index() - 1];
+      if (currentWord != getKeys()[0]) {
+        currentWord = getKeys()[index() - 1];
         showWord();
       }
     }
@@ -233,7 +233,7 @@
       }
 
       setCookie("mayus", mayus, 30);
-      showWord(false);
+      showWord();
     }
 
     function toggleRandom() {
@@ -334,6 +334,10 @@
         openFullscreen();
       }
     });
+
+    function getKeys() {
+      return (random) ? Object.keys(randomWords) : Object.keys(words);
+    }
 
     function setCookie(name, value, daysToExpire) {
       const expirationDate = new Date();
