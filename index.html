@@ -171,10 +171,10 @@
     let mayus = getCookie("mayus") || "uppercase";
     let random = getCookie("random") === 'true' || false;
 
-    function showWord() {
+    function showWord(persistWord = true) {
       let word = currentWord
 
-      if (random) {
+      if (random && !persistWord) {
         word = Object.keys(words)[Math.floor(Math.random() * allKeys.length)];
       }
 
@@ -233,7 +233,7 @@
       }
 
       setCookie("mayus", mayus, 30);
-      showWord();
+      showWord(false);
     }
 
     function toggleRandom() {
